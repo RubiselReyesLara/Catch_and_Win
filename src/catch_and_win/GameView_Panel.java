@@ -2,14 +2,15 @@ package catch_and_win;
 
 import Items.ItemsPanel;
 import Player.PlayerPanel;
+import Player.Score_Manager;
 import Player.MovePlayer;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import javax.swing.BorderFactory;
 
 public class GameView_Panel extends javax.swing.JPanel {
-
     PlayerPanel player_Panel;
+    Score_Manager score_Panel;
     ItemsPanel items_Panel;
     MovePlayer move_Player;
     Thread thread_MovePlayer;
@@ -20,12 +21,13 @@ public class GameView_Panel extends javax.swing.JPanel {
         this.setBackground(Color.white);
 
         player_Panel = new PlayerPanel(screen);
+        score_Panel = new Score_Manager(screen);
         move_Player = new MovePlayer(player_Panel, screen);
-        items_Panel = new ItemsPanel(screen, player_Panel);
+        items_Panel = new ItemsPanel(screen, player_Panel, score_Panel);
         thread_MovePlayer = new Thread(move_Player);
         
         //TOP to BOTTOM
-        
+        this.add(score_Panel);
         this.add(items_Panel);
         this.add(player_Panel);
 //        

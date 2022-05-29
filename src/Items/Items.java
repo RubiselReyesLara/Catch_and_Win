@@ -5,12 +5,14 @@ import java.awt.Image;
 import java.awt.geom.Rectangle2D;
 import javax.swing.ImageIcon;
 import catch_and_win.Init_Game;
+import Player.Score_Manager;
 
-public class MoveItems extends Thread{
+public class Items extends Thread{
     
     int X = 0; int Y = 0; int id = 0;
     Init_Game Screen;
     PlayerPanel playerPanel;
+    Score_Manager score_Manager;
     ItemsPanel itemsPanel;
     //Graphics
     Rectangle2D hitBox = new Rectangle2D.Double(X, Y, 50, 50);
@@ -18,10 +20,12 @@ public class MoveItems extends Thread{
     //State of the current item
     boolean type = true; boolean stateOn = true; boolean availableItem = true;  
     
-    MoveItems(Init_Game IG, PlayerPanel PP, ItemsPanel IP, int X, int Y, int position, boolean type){
+    Items(Init_Game IG, PlayerPanel PP, Score_Manager SM, ItemsPanel IP, 
+            int X, int Y, int position, boolean type){
         //Instance for communication with the other panels.
         this.Screen = IG;
         this.playerPanel = PP;
+        this.score_Manager = SM;
         this.itemsPanel = IP;
         //Asign X or Y.
         this.X = X;
@@ -48,8 +52,9 @@ public class MoveItems extends Thread{
                 
                 if(playerPanel.player_Hitbox.intersects(this.hitBox)){
                     stop_moveItem();
+                    
+                    this.score_Manager.increaseScore();
                 }
-                
                 try{
                     Thread.sleep(12);
                 }catch(InterruptedException ex){}

@@ -68,7 +68,7 @@ public class Init_Game extends javax.swing.JFrame{
                 GameViewPanel = new GameView_Panel(this);
                 
                 /*Read score*/
-                readCurrentScore();
+                //readCurrentScore();
                 
                 this.getContentPane().removeAll();
                 this.getContentPane().add(GameViewPanel);
@@ -116,9 +116,6 @@ public class Init_Game extends javax.swing.JFrame{
         this.getContentPane().add(MainScreen);
     }
 
-    private void readCurrentScore() {
-        //TODO
-    }
     
     
 

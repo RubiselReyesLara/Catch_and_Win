@@ -8,6 +8,8 @@ import java.awt.geom.Rectangle2D;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import catch_and_win.Init_Game;
+import java.awt.BorderLayout;
+import javax.swing.JLabel;
 
 
 public class PlayerPanel extends javax.swing.JPanel {
@@ -42,6 +44,10 @@ public class PlayerPanel extends javax.swing.JPanel {
     public void changeAnimation(String state){
         //Change the state of character according the orientation (right or left)
         this.player = new ImageIcon(getClass().getResource("/Player/Sprites/" + state + ".png")).getImage();
+    }
+    
+    public void scoreManagment(){
+        
     }
 
     
