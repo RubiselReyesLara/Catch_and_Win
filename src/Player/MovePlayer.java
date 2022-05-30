@@ -51,7 +51,8 @@ public class MovePlayer implements Runnable{
         moving_Value = 3;
         this.keyboard_key = key;
     }
-//    public void stopPlayer(){
-//        moving_Value = 0;
-//    }
+    
+    public void stopPlayer(){
+        stateOn = false;
+    }
 }

@@ -55,7 +55,9 @@ public class Init_Game extends javax.swing.JFrame{
     }// </editor-fold>//GEN-END:initComponents
 
     private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
+        //Controls if the user is in the mainscreen, or in game.
         if(ControlScreenManager == 0){ 
+            
             //If the user press ESC in main screen
             if(evt.getKeyCode() == KeyEvent.VK_ESCAPE){
                 int exit = JOptionPane.showConfirmDialog(this, "You want exit?", "Exit or not?", JOptionPane.YES_NO_OPTION);
@@ -65,6 +67,8 @@ public class Init_Game extends javax.swing.JFrame{
             } else {
                 //Generate game screen
                 ControlScreenManager = 1;
+                
+                //Panel that do all about the game
                 GameViewPanel = new GameView_Panel(this);
                 
                 /*Read score*/
@@ -77,19 +81,13 @@ public class Init_Game extends javax.swing.JFrame{
                 this.revalidate();
             }
          }else if(evt.getKeyCode() == KeyEvent.VK_A){
-            //1 para moverlo a la izquierda
+             
+            //1 for left move
             GameViewPanel.move_Player.movePlayer((byte)1);
         } else if(evt.getKeyCode() == KeyEvent.VK_D){
-            //2 para moverlo a la derecha
+            //2 for right move
             GameViewPanel.move_Player.movePlayer((byte)2);
         } 
-        
-            //1 para moverlo a la izquierda
-//            temporizadorJugador.moverJugador((byte)1);
-//        } else if(evt.getKeyCode() == KeyEvent.VK_D){
-//            //2 para moverlo a la derecha
-//            temporizadorJugador.moverJugador((byte)2);
-//        }
     }//GEN-LAST:event_formKeyPressed
 
     private void formKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyReleased
@@ -109,7 +107,8 @@ public class Init_Game extends javax.swing.JFrame{
         
         
         /*Load main screen*/
-        //Load the first panel
+        //Load the first panel (Mainscreen) this includes the firsts visuals 
+        //components, though this class (Init Game) controls the game typing.
         MainScreen = new MainScreen(this);
         
         /*Load in frame*/

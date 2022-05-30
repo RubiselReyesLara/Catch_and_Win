@@ -6,6 +6,7 @@ import java.awt.geom.Rectangle2D;
 import javax.swing.ImageIcon;
 import catch_and_win.Init_Game;
 import Player.Score_Manager;
+import java.util.Random;
 
 public class Items extends Thread{
     
@@ -18,10 +19,10 @@ public class Items extends Thread{
     Rectangle2D hitBox = new Rectangle2D.Double(X, Y, 50, 50);
     Image item;
     //State of the current item
-    boolean type = true; boolean stateOn = true; boolean availableItem = true;  
+    byte type = 0; boolean stateOn = true; boolean availableItem = true;  
     
     Items(Init_Game IG, PlayerPanel PP, Score_Manager SM, ItemsPanel IP, 
-            int X, int Y, int position, boolean type){
+            int X, int Y, int position, String itemName, byte type){
         //Instance for communication with the other panels.
         this.Screen = IG;
         this.playerPanel = PP;
@@ -32,7 +33,12 @@ public class Items extends Thread{
         this.Y = Y;
         //Asign the ID of the item thread current state.
         this.id = position;
-        this.item = new ImageIcon(getClass().getResource("/Img/Lvl1/b1.png")).getImage();
+        Random random = new Random();
+        int answer = random.nextInt(10);
+        //Asign if the item is good(1), or bad(0) according the byte value received.
+        this.type = type;
+        
+        this.item = new ImageIcon(getClass().getResource(itemName)).getImage();
     }
     //Stops item thread.
     public void stop_moveItem(){
@@ -52,8 +58,11 @@ public class Items extends Thread{
                 
                 if(playerPanel.player_Hitbox.intersects(this.hitBox)){
                     stop_moveItem();
-                    
+                    if(this.type == 0){
                     this.score_Manager.increaseScore();
+                    } else {
+                        this.score_Manager.decreaseScore();
+                    }
                 }
                 try{
                     Thread.sleep(12);

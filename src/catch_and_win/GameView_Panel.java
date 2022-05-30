@@ -6,20 +6,27 @@ import Player.Score_Manager;
 import Player.MovePlayer;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
+import javax.swing.JLabel;
+import javax.swing.Timer;
 
 public class GameView_Panel extends javax.swing.JPanel {
+    Init_Game init_game;
     PlayerPanel player_Panel;
     Score_Manager score_Panel;
     ItemsPanel items_Panel;
     MovePlayer move_Player;
     Thread thread_MovePlayer;
+    byte time = 60;
 
     public GameView_Panel(Init_Game screen) {
         initComponents();
         this.setSize(screen.getWidth(), screen.getHeight());
         this.setBackground(Color.white);
 
+        init_game = screen;
         player_Panel = new PlayerPanel(screen);
         score_Panel = new Score_Manager(screen);
         move_Player = new MovePlayer(player_Panel, screen);
@@ -32,7 +39,33 @@ public class GameView_Panel extends javax.swing.JPanel {
         this.add(player_Panel);
 //        
         thread_MovePlayer.start();
+        //items_Panel.generator_Items().start();
+        timerGame().start();
     }
+    
+    public Timer timerGame(){
+        return new Timer(500, new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                time--;
+                score_Panel.jl_timer.setText(time + "s");
+                if(time <= 0){
+                    
+                    items_Panel.stopGeneratorItems();
+                    move_Player.stopPlayer();
+                    init_game.getContentPane().removeAll();
+                    init_game.repaint();
+                    
+                    //Call garbage collector for remove the unused actual
+                    //objects used and saved in the last game
+                    System.gc();
+                }
+            }
+        });
+    }
+    
+    
+    
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
