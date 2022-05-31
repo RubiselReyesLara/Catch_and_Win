@@ -18,10 +18,11 @@ public class GameView_Panel extends javax.swing.JPanel {
     Score_Manager score_Panel;
     ItemsPanel items_Panel;
     MovePlayer move_Player;
+    Timer timerGame;
     Thread thread_MovePlayer;
-    byte time = 60;
+    byte time = 60; byte lvl = 0;
 
-    public GameView_Panel(Init_Game screen) {
+    public GameView_Panel(Init_Game screen, byte level) {
         initComponents();
         this.setSize(screen.getWidth(), screen.getHeight());
         this.setBackground(Color.white);
@@ -31,6 +32,8 @@ public class GameView_Panel extends javax.swing.JPanel {
         score_Panel = new Score_Manager(screen);
         move_Player = new MovePlayer(player_Panel, screen);
         items_Panel = new ItemsPanel(screen, player_Panel, score_Panel);
+        timerGame = timerGame();
+        lvl = level;
         thread_MovePlayer = new Thread(move_Player);
         
         //TOP to BOTTOM
@@ -40,7 +43,7 @@ public class GameView_Panel extends javax.swing.JPanel {
 //        
         thread_MovePlayer.start();
         //items_Panel.generator_Items().start();
-        timerGame().start();
+        timerGame.start();
     }
     
     public Timer timerGame(){
@@ -50,12 +53,11 @@ public class GameView_Panel extends javax.swing.JPanel {
                 time--;
                 score_Panel.jl_timer.setText(time + "s");
                 if(time <= 0){
-                    
-                    items_Panel.stopGeneratorItems();
+                    //items_Panel.stopGeneratorItems();
                     move_Player.stopPlayer();
-                    init_game.getContentPane().removeAll();
-                    init_game.repaint();
-                    
+                    //init_game.getContentPane().removeAll();
+                    //init_game.repaint();
+                    timerGame.stop();
                     //Call garbage collector for remove the unused actual
                     //objects used and saved in the last game
                     System.gc();
@@ -64,9 +66,6 @@ public class GameView_Panel extends javax.swing.JPanel {
         });
     }
     
-    
-    
-
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {

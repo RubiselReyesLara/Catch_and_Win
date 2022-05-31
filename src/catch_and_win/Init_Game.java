@@ -6,6 +6,14 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -68,11 +76,14 @@ public class Init_Game extends javax.swing.JFrame{
                 //Generate game screen
                 ControlScreenManager = 1;
                 
-                //Panel that do all about the game
-                GameViewPanel = new GameView_Panel(this);
-                
-                /*Read score*/
-                //readCurrentScore();
+                try {
+                    //Panel that do all about the game
+                    GameViewPanel = new GameView_Panel(this, readCurrentLevel());
+                } catch (IOException ex) {
+                    System.out.println("Error in file read for load level: " + 
+                            ex.toString());
+                    GameViewPanel = new GameView_Panel(this, (byte)0);
+                }
                 
                 this.getContentPane().removeAll();
                 this.getContentPane().add(GameViewPanel);
@@ -115,7 +126,16 @@ public class Init_Game extends javax.swing.JFrame{
         this.getContentPane().add(MainScreen);
     }
 
-    
+    private byte readCurrentLevel() throws FileNotFoundException, IOException{
+        URL path = this.getClass().getResource("lvl.txt");
+        BufferedReader buffer = new BufferedReader(new FileReader(path.getFile()));
+        byte lvl = Byte.parseByte(buffer.readLine());
+        if(lvl > 0 && lvl < 3){
+            return lvl;
+        } else {
+            return 0;
+        }
+    }
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
