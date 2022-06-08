@@ -7,6 +7,7 @@ import java.awt.Font;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Random;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
@@ -19,7 +20,9 @@ public class Score_Manager extends JPanel{
     //Label Score
     public JLabel jl_score, jl_timer;
     JPanel panel;
-    int score = 0, time = 60;
+    int score = 0;
+    int time = 100;
+    final int MOUNT = 10;
     
     public Score_Manager(Init_Game screen) {
         this.setLayout(new BorderLayout()); 
@@ -37,7 +40,7 @@ public class Score_Manager extends JPanel{
         this.setOpaque(false);
         
         jl_score = new JLabel("Score: " + score);
-        jl_timer = new JLabel("60s");
+        jl_timer = new JLabel("100s");
         jl_score.setFont(new Font("Tw Cent MT", Font.BOLD, 20));
         jl_timer.setFont(new Font("Tw Cent MT", Font.BOLD, 20));
         jl_score.setBorder(new EmptyBorder(10,10,10,10));
@@ -49,13 +52,13 @@ public class Score_Manager extends JPanel{
     }
     
     public void increaseScore(){
-        score++;
+        score += MOUNT;
         this.jl_score.setText("Score: " + score);
         this.jl_score.setForeground(Color.GREEN);
     }
     
     public void decreaseScore(){
-        score--;
+        score -= MOUNT;
         this.jl_score.setText("Score: " + score);
         this.jl_score.setForeground(Color.RED);
     }

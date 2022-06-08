@@ -20,13 +20,12 @@ public class GameView_Panel extends javax.swing.JPanel {
     MovePlayer move_Player;
     Timer timerGame;
     Thread thread_MovePlayer;
-    byte time = 60; byte lvl = 0;
+    byte time = 100; byte lvl = 0;
 
     public GameView_Panel(Init_Game screen, byte level) {
         initComponents();
         this.setSize(screen.getWidth(), screen.getHeight());
         this.setBackground(Color.white);
-
         init_game = screen;
         player_Panel = new PlayerPanel(screen);
         score_Panel = new Score_Manager(screen);
@@ -46,6 +45,7 @@ public class GameView_Panel extends javax.swing.JPanel {
         timerGame.start();
     }
     
+    //Timer for the game (100s)
     public Timer timerGame(){
         return new Timer(500, new ActionListener(){
             @Override
@@ -57,7 +57,16 @@ public class GameView_Panel extends javax.swing.JPanel {
                     move_Player.stopPlayer();
                     //init_game.getContentPane().removeAll();
                     //init_game.repaint();
+                    
+                    
+                    
+                    
+                    
+                    
                     timerGame.stop();
+                    
+                    
+                    
                     //Call garbage collector for remove the unused actual
                     //objects used and saved in the last game
                     System.gc();

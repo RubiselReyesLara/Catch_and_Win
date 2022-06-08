@@ -87,7 +87,7 @@ public class ItemsPanel extends JPanel{
     Graphics2D global_Graphic;
     Random random = new Random();
     Init_Game Screen;
-    ItemsPanel This; PlayerPanel playerPanel; Score_Manager scoreManager;
+    PlayerPanel playerPanel; Score_Manager scoreManager;
     Timer generator = generator_Items();
     
     int X = 0; int Y = 0; int counterItem = 0;
@@ -107,7 +107,6 @@ public class ItemsPanel extends JPanel{
         // this.setBackground(Color.red);
         this.playerPanel = PP;
         this.scoreManager = SM;
-        this.This = this;
         //Start to generate items...
         generator.start();
     }
@@ -115,10 +114,10 @@ public class ItemsPanel extends JPanel{
     @Override
     public void paint(Graphics graphic){
         super.paintComponent(graphic);
-        global_Graphic = (Graphics2D)graphic;
+        this.global_Graphic = (Graphics2D)graphic;
         //It creates an iterator for understand the map of the items threads
         Iterator<Map.Entry<Integer, Items>> iterator = 
-                moveItemsList.entrySet().iterator();
+                this.moveItemsList.entrySet().iterator();
         System.out.println("\n");
         //While the iterator has more items...
         while(iterator.hasNext()){
@@ -129,7 +128,7 @@ public class ItemsPanel extends JPanel{
             if(entry.getValue().availableItem){
                System.out.println(entry.getValue().id);
                //Draws it.
-               global_Graphic.drawImage(entry.getValue().item, entry.getValue().X, 
+               this.global_Graphic.drawImage(entry.getValue().item, entry.getValue().X, 
                        entry.getValue().Y, 50, 50, null);
             } else {
                 iterator.remove();
@@ -147,8 +146,15 @@ public class ItemsPanel extends JPanel{
                 repaint();
                 getItemType();
                 //Create an item in moveItems...
-                moveItemsList.put(counterItem, new Items(Screen, playerPanel, 
-                        scoreManager,This, X, -60, counterItem, itemName, type));
+                moveItemsList.put(counterItem, new Items(Screen, 
+                                                        playerPanel, 
+                                                        scoreManager,
+                                                        ItemsPanel.this, 
+                                                        X, 
+                                                        -60, 
+                                                        counterItem, 
+                                                        itemName, 
+                                                        type));
                 //Start the item thread according the key (counterItem)
                 moveItemsList.get(counterItem).start();
                 counterItem++;
@@ -162,7 +168,6 @@ public class ItemsPanel extends JPanel{
     
     public void getItemType(){
         this.type = (byte)(this.random.nextInt(2));
-        System.out.println(this.type + " tipo ");
         this.itemName = this.itemTypes[this.type][(byte)this.random.nextInt(3)];
         
     }

@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.BufferedReader;
@@ -63,36 +64,7 @@ public class Init_Game extends javax.swing.JFrame{
     }// </editor-fold>//GEN-END:initComponents
 
     private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
-        //Controls if the user is in the mainscreen, or in game.
-        if(ControlScreenManager == 0){ 
-            
-            //If the user press ESC in main screen
-            if(evt.getKeyCode() == KeyEvent.VK_ESCAPE){
-                int exit = JOptionPane.showConfirmDialog(this, "You want exit?", "Exit or not?", JOptionPane.YES_NO_OPTION);
-                if(exit == 0){
-                    System.exit(0);
-                }
-            } else {
-                //Generate game screen
-                ControlScreenManager = 1;
-                
-                try {
-                    //Panel that do all about the game
-                    GameViewPanel = new GameView_Panel(this, readCurrentLevel());
-                } catch (IOException ex) {
-                    System.out.println("Error in file read for load level: " + 
-                            ex.toString());
-                    GameViewPanel = new GameView_Panel(this, (byte)0);
-                }
-                
-                this.getContentPane().removeAll();
-                this.getContentPane().add(GameViewPanel);
-
-                this.repaint();
-                this.revalidate();
-            }
-         }else if(evt.getKeyCode() == KeyEvent.VK_A){
-             
+        if(evt.getKeyCode() == KeyEvent.VK_A){
             //1 for left move
             GameViewPanel.move_Player.movePlayer((byte)1);
         } else if(evt.getKeyCode() == KeyEvent.VK_D){
@@ -125,7 +97,27 @@ public class Init_Game extends javax.swing.JFrame{
         /*Load in frame*/
         this.getContentPane().add(MainScreen);
     }
+    
+    public void actionPerformedStartBtn(ActionEvent e ){
+        try {
+            //Panel that do all about the game
+            GameViewPanel = new GameView_Panel(this, readCurrentLevel());
+        } catch (IOException ex) {
+            System.out.println("Error in file read for load level: " + 
+                    ex.toString());
+            GameViewPanel = new GameView_Panel(this, (byte)0);
+        }
 
+        this.getContentPane().removeAll();
+        this.getContentPane().add(GameViewPanel);
+        this.repaint();
+        this.revalidate();
+        System.gc();
+    }
+    
+    
+
+    // Read the lvl file for load data according the lvl
     private byte readCurrentLevel() throws FileNotFoundException, IOException{
         URL path = this.getClass().getResource("lvl.txt");
         BufferedReader buffer = new BufferedReader(new FileReader(path.getFile()));
