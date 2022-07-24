@@ -20,7 +20,8 @@ public class GameView_Panel extends javax.swing.JPanel {
     MovePlayer move_Player;
     Timer timerGame;
     Thread thread_MovePlayer;
-    byte time = 100; byte lvl = 0;
+    String fd_second = "0"; String fd_minute = "0"; // First digit of timer string
+    byte seconds = 0; byte minutes = 0; byte lvl = 0;
 
     public GameView_Panel(Init_Game screen, byte level) {
         initComponents();
@@ -47,12 +48,30 @@ public class GameView_Panel extends javax.swing.JPanel {
     
     //Timer for the game (100s)
     public Timer timerGame(){
-        return new Timer(500, new ActionListener(){
+        return new Timer(1000, new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-                time--;
-                score_Panel.jl_timer.setText(time + "s");
-                if(time <= 0){
+                // Timer Game Clock
+                seconds++;
+                if (seconds > 9) { // 00:01 -> 00:10 
+                    score_Panel.jl_timer.setText("Time: "  + fd_minute + minutes + ":" + seconds);
+                    if (seconds > 59){ // 00:59 -> 01:00
+                        seconds = 0;
+                        minutes++;
+                        if(minutes > 9){ // 01:10
+                            fd_minute = "";
+                            score_Panel.jl_timer.setText("Time: " + minutes + ":0" + seconds);
+                        } else { // 01:01
+                            score_Panel.jl_timer.setText("Time: 0" + minutes + ":0" + seconds);
+                        }
+                    }
+                } else { // 00:01
+                    score_Panel.jl_timer.setText("Time: "  + fd_minute + minutes + ":0" + seconds);
+                }
+                
+                
+                /*
+                if(seconds <= 0){
                     //items_Panel.stopGeneratorItems();
                     move_Player.stopPlayer();
                     //init_game.getContentPane().removeAll();
@@ -70,7 +89,7 @@ public class GameView_Panel extends javax.swing.JPanel {
                     //Call garbage collector for remove the unused actual
                     //objects used and saved in the last game
                     System.gc();
-                }
+                }*/
             }
         });
     }
