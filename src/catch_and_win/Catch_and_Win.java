@@ -5,7 +5,7 @@ public class Catch_and_Win {
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new Init_Game().setVisible(true);
+                new PrincipalContainer().setVisible(true);
             }
         });
     }

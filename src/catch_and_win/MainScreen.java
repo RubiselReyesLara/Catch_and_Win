@@ -1,4 +1,3 @@
-
 package catch_and_win;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -8,15 +7,16 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
 public class MainScreen extends JPanel{
-    final Init_Game INIT_GAME;
+    final PrincipalContainer INIT_GAME;
     final JButton btn_startTitle;
     
-    public MainScreen(Init_Game screen) {
+    public MainScreen(PrincipalContainer screen) {
         INIT_GAME = screen;
         this.setSize(INIT_GAME.getWidth(), INIT_GAME.getHeight());
         this.setLayout(new BorderLayout());
-        this.setBackground(Color.red);
+        this.setBackground(Color.blue);
         
         //Load titleContainer in panel
         JPanel titleContainer = new JPanel(); 
@@ -51,7 +51,6 @@ public class MainScreen extends JPanel{
         this.add(titleContainer,BorderLayout.NORTH);
         this.add(instructionContainer, BorderLayout.CENTER);
         this.add(options_stuffContainer, BorderLayout.SOUTH);
-        
         buttonEvent();
     }
     
@@ -63,5 +62,4 @@ public class MainScreen extends JPanel{
             }
         });
     }
-    
 }

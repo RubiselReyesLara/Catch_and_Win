@@ -1,6 +1,6 @@
 package Player;
 
-import catch_and_win.Init_Game;
+import catch_and_win.PrincipalContainer;
 
 public class MovePlayer implements Runnable{
     public byte leftRight_currentMove = 0;
@@ -10,10 +10,10 @@ public class MovePlayer implements Runnable{
     private byte keyboard_key = 0;
     private Thread thread_Anim;
     PlayerPanel player;
-    Init_Game screenGame;
+    PrincipalContainer screenGame;
     AnimationPlayer animator;
     
-    public MovePlayer(PlayerPanel player, Init_Game screenGame){
+    public MovePlayer(PlayerPanel player, PrincipalContainer screenGame){
         this.player = player;
         this.screenGame = screenGame;
         this.animator = new AnimationPlayer(this, this.player);

@@ -7,7 +7,7 @@ import java.awt.Image;
 import java.awt.geom.Rectangle2D;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
-import catch_and_win.Init_Game;
+import catch_and_win.PrincipalContainer;
 import java.awt.BorderLayout;
 import javax.swing.JLabel;
 
@@ -20,7 +20,7 @@ public class PlayerPanel extends javax.swing.JPanel {
     
     
     //Build the playerPanel
-    public PlayerPanel(Init_Game Screen) {
+    public PlayerPanel(PrincipalContainer Screen) {
         this.setBounds(0,0,Screen.getWidth(),Screen.getHeight());
         this.setOpaque(false);
         this.setBackground(Color.black);
@@ -45,11 +45,6 @@ public class PlayerPanel extends javax.swing.JPanel {
         //Change the state of character according the orientation (right or left)
         this.player = new ImageIcon(getClass().getResource("/Player/Sprites/" + state + ".png")).getImage();
     }
-    
-    public void scoreManagment(){
-        
-    }
-
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents

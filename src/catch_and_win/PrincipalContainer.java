@@ -1,145 +1,172 @@
 package catch_and_win;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.net.URL;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-//import Player.MovePlayer;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import org.w3c.dom.DOMImplementation;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.w3c.dom.Text;
 
-public class Init_Game extends javax.swing.JFrame{
+public class PrincipalContainer extends javax.swing.JFrame{
     MainScreen MainScreen;
     //Are you in main or game screen? 
     Byte ControlScreenManager = 0;
-    GameView_Panel GameViewPanel;
+    public boolean gameStarted = false;
+    public boolean onFinalScreen = false;
+    public GameView_Panel GameViewPanel;
     
-    
-    public Init_Game() {
+    public PrincipalContainer(){
         initComponents();
-        initComponents_v2();
+        //writeUserData("00:45", "142");
+        //readUserData();
     }
     
-    @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                formKeyPressed(evt);
-            }
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                formKeyReleased(evt);
-            }
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                formKeyTyped(evt);
-            }
-        });
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
-        );
-
-        pack();
-    }// </editor-fold>//GEN-END:initComponents
-
-    private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
-        if(evt.getKeyCode() == KeyEvent.VK_A){
-            //1 for left move
-            GameViewPanel.move_Player.movePlayer((byte)1);
-        } else if(evt.getKeyCode() == KeyEvent.VK_D){
-            //2 for right move
-            GameViewPanel.move_Player.movePlayer((byte)2);
-        } 
-    }//GEN-LAST:event_formKeyPressed
-
-    private void formKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyReleased
-        
-    }//GEN-LAST:event_formKeyReleased
-
-    private void formKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyTyped
-        
-    }//GEN-LAST:event_formKeyTyped
-    
-    private void initComponents_v2() {
-//        this.requestFocus(true);
         this.setLayout(new BorderLayout());
         this.setSize(530, 630);
         this.setLocationRelativeTo(null);
         this.setResizable(false);
         
-        
-        /*Load main screen*/
-        //Load the first panel (Mainscreen) this includes the firsts visuals 
-        //components, though this class (Init Game) controls the game typing.
-        MainScreen = new MainScreen(this);
-        
-        /*Load in frame*/
-        this.getContentPane().add(MainScreen);
+        this.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                formKeyPressed(evt);
+            }
+        });
+
+        LOAD_MAIN_SCREEN();
+    }
+
+    private void formKeyPressed(java.awt.event.KeyEvent evt) {
+        if(this.gameStarted){
+            if(evt.getKeyCode() == KeyEvent.VK_A){
+                //1 for left move
+                GameViewPanel.move_Player.movePlayer((byte)1);
+            }
+            if(evt.getKeyCode() == KeyEvent.VK_D){
+                //2 for right move
+                GameViewPanel.move_Player.movePlayer((byte)2);
+            }
+            if(evt.getKeyCode() == KeyEvent.VK_LEFT){
+                //1 for left move
+                GameViewPanel.move_Player.movePlayer((byte)1);
+            }
+            if(evt.getKeyCode() == KeyEvent.VK_RIGHT){
+                //2 for right move
+                GameViewPanel.move_Player.movePlayer((byte)2);
+            }
+        } else {
+            if(evt.getKeyCode() == KeyEvent.VK_ENTER || evt.getKeyCode() == KeyEvent.VK_SPACE){
+                START_GAME();
+                this.gameStarted = true;
+            }
+        }
+        // FINAL SCREEN OPTIONS WITH KEYBOARD
+        if(this.onFinalScreen){
+            if(evt.getKeyCode() == KeyEvent.VK_X){
+                this.getContentPane().removeAll();
+                LOAD_MAIN_SCREEN();
+            }
+        }
     }
     
+
+    public void LOAD_MAIN_SCREEN(){
+        this.gameStarted = false;
+        MainScreen = new MainScreen(this);
+        this.getContentPane().add(MainScreen);
+        this.revalidate();
+        this.repaint();
+    }
+    
+
     public void actionPerformedStartBtn(ActionEvent e ){
-        try {
-            //Panel that do all about the game
-            GameViewPanel = new GameView_Panel(this, readCurrentLevel());
-        } catch (IOException ex) {
-            System.out.println("Error in file read for load level: " + 
-                    ex.toString());
-            GameViewPanel = new GameView_Panel(this, (byte)0);
-        }
+        START_GAME();
+        this.gameStarted = true;
+    }
+    
+
+    public void START_GAME(){
+        //Panel that do all about the game
+        GameViewPanel = new GameView_Panel(this, readCurrentLevel());
 
         this.getContentPane().removeAll();
         this.getContentPane().add(GameViewPanel);
-        this.repaint();
         this.revalidate();
-        System.gc();
+        this.repaint();
     }
-    
     
 
     // Read the lvl file for load data according the lvl
-    private byte readCurrentLevel() throws FileNotFoundException, IOException{
-        URL path = this.getClass().getResource("lvl.txt");
-        BufferedReader buffer = new BufferedReader(new FileReader(path.getFile()));
-        byte lvl = Byte.parseByte(buffer.readLine());
-        if(lvl > 0 && lvl < 3){
-            return lvl;
-        } else {
-            return 0;
+    private byte readCurrentLevel(){
+        
+        return 0;
+    }
+
+
+    public void writeUserData(String time, String score){
+        try{
+            DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance(); // New instance XML
+            DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();             // Creates a new builder for a document
+            DOMImplementation DOM_Implementation = docBuilder.getDOMImplementation();        // Implements DOM for the document builder    
+
+            Document doc = DOM_Implementation.createDocument(null, "data", null); // Creates a doc DOM
+            doc.setXmlVersion("1.0");
+
+            Element user = doc.createElement("user");               // First tag USER
+
+            Element best_time = doc.createElement("best_time");     // Tag time
+            Text txt_time = doc.createTextNode(time); 
+            best_time.appendChild(txt_time);
+
+            Element best_score = doc.createElement("best_score");   // Tag score
+            Text txt_score = doc.createTextNode(score); 
+            best_score.appendChild(txt_score);
+
+            // Append time and score in user tag
+            user.appendChild(best_time);
+            user.appendChild(best_score);
+
+            doc.getDocumentElement().appendChild(user); // Add user to the XML root
+
+            Source source = new DOMSource(doc);
+            Result result = new StreamResult(new File("user.xml"));
+
+            Transformer transform = TransformerFactory.newInstance().newTransformer();
+            transform.transform(source, result);
+        }catch(Exception ex){
+
         }
     }
-    
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    // End of variables declaration//GEN-END:variables
-public static void main(String[] args) {
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new Init_Game().setVisible(true);
-            }
-        });
+
+    private String[] readUserData(){
+        String userData[] = new String[1];
+        try{
+            DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance(); // New instance XML
+            DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();             // Creates a new builder for a document
+            Document doc = docBuilder.parse(new File("user.xml"));
+            NodeList userPackage = doc.getDocumentElement().getElementsByTagName("user");
+                Element userUnpack = (Element) userPackage.item(0);
+                /*System.out.println(userUnpack.getElementsByTagName("best_time").item(0).getTextContent());
+                System.out.println(userUnpack.getElementsByTagName("best_score").item(0).getTextContent());*/
+            userData[0] = userUnpack.getElementsByTagName("best_time").item(0).getTextContent();
+            userData[1] = userUnpack.getElementsByTagName("best_score").item(0).getTextContent();
+            return (userData);
+        }catch(Exception ex){
+            System.out.println(ex.getMessage());
+            return null;
+        }
     }
-
 }
 
