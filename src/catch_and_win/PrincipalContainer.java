@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import javax.swing.WindowConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Result;
@@ -20,11 +21,13 @@ import org.w3c.dom.Text;
 
 public class PrincipalContainer extends javax.swing.JFrame{
     MainScreen MainScreen;
+    String userData[];
     //Are you in main or game screen? 
     Byte ControlScreenManager = 0;
     public boolean gameStarted = false;
     public boolean onFinalScreen = false;
     public GameView_Panel GameViewPanel;
+    
     
     public PrincipalContainer(){
         initComponents();
@@ -32,11 +35,15 @@ public class PrincipalContainer extends javax.swing.JFrame{
         //readUserData();
     }
     
+    
     private void initComponents() {
+        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setLayout(new BorderLayout());
         this.setSize(530, 630);
         this.setLocationRelativeTo(null);
         this.setResizable(false);
+        this.getContentPane().setCursor(null);
+        this.getContentPane().setCursor(null);
         
         this.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
@@ -46,6 +53,7 @@ public class PrincipalContainer extends javax.swing.JFrame{
 
         LOAD_MAIN_SCREEN();
     }
+
 
     private void formKeyPressed(java.awt.event.KeyEvent evt) {
         if(this.gameStarted){
@@ -97,20 +105,14 @@ public class PrincipalContainer extends javax.swing.JFrame{
     
 
     public void START_GAME(){
-        //Panel that do all about the game
-        GameViewPanel = new GameView_Panel(this, readCurrentLevel());
+        this.userData = readUserData();
+
+        GameViewPanel = new GameView_Panel(this, this.userData[0], this.userData[1]);
 
         this.getContentPane().removeAll();
         this.getContentPane().add(GameViewPanel);
         this.revalidate();
         this.repaint();
-    }
-    
-
-    // Read the lvl file for load data according the lvl
-    private byte readCurrentLevel(){
-        
-        return 0;
     }
 
 
@@ -125,17 +127,17 @@ public class PrincipalContainer extends javax.swing.JFrame{
 
             Element user = doc.createElement("user");               // First tag USER
 
-            Element best_time = doc.createElement("best_time");     // Tag time
+            Element bestTime_tag = doc.createElement("best_time");     // Tag time
             Text txt_time = doc.createTextNode(time); 
-            best_time.appendChild(txt_time);
+            bestTime_tag.appendChild(txt_time);
 
-            Element best_score = doc.createElement("best_score");   // Tag score
+            Element bestScore_tag = doc.createElement("best_score");   // Tag score
             Text txt_score = doc.createTextNode(score); 
-            best_score.appendChild(txt_score);
+            bestScore_tag.appendChild(txt_score);
 
             // Append time and score in user tag
-            user.appendChild(best_time);
-            user.appendChild(best_score);
+            user.appendChild(bestTime_tag);
+            user.appendChild(bestScore_tag);
 
             doc.getDocumentElement().appendChild(user); // Add user to the XML root
 
@@ -151,21 +153,23 @@ public class PrincipalContainer extends javax.swing.JFrame{
 
 
     private String[] readUserData(){
-        String userData[] = new String[1];
+        String userData[] = new String[2];
         try{
             DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance(); // New instance XML
             DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();             // Creates a new builder for a document
+
             Document doc = docBuilder.parse(new File("user.xml"));
             NodeList userPackage = doc.getDocumentElement().getElementsByTagName("user");
-                Element userUnpack = (Element) userPackage.item(0);
-                /*System.out.println(userUnpack.getElementsByTagName("best_time").item(0).getTextContent());
-                System.out.println(userUnpack.getElementsByTagName("best_score").item(0).getTextContent());*/
-            userData[0] = userUnpack.getElementsByTagName("best_time").item(0).getTextContent();
-            userData[1] = userUnpack.getElementsByTagName("best_score").item(0).getTextContent();
+            Element userUnpack = (Element) userPackage.item(0);
+
+            userData[0] = "Best: " + userUnpack.getElementsByTagName("best_score").item(0).getTextContent();
+            userData[1] = "Best: " + userUnpack.getElementsByTagName("best_time").item(0).getTextContent();
             return (userData);
         }catch(Exception ex){
             System.out.println(ex.getMessage());
-            return null;
+            userData[0] = "Best: 0";
+            userData[1] = "Best: 00:00";
+            return userData;
         }
     }
 }

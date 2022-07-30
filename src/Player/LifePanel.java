@@ -44,7 +44,7 @@ public class LifePanel extends JPanel{
         super.paintComponent(graphic);
         this.heart = (Graphics2D) graphic;
         int increaseX = 10;
-        if(this.decreaseLives < 5){
+        if(this.decreaseLives < 6){
             for(byte i = 0; i <= 5 - this.decreaseLives; i++){
                 this.heart.drawImage(new ImageIcon(getClass().getResource("/Img/heart.png"))
                         .getImage(), increaseX, 10, 20, 20, this);

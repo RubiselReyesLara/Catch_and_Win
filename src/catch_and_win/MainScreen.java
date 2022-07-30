@@ -36,7 +36,7 @@ public class MainScreen extends JPanel{
         
         instructionContainer.setBackground(Color.CYAN);
         instructionContainer.setLayout(null);
-        btn_startTitle = new JButton("Press any key to start");
+        btn_startTitle = new JButton("Press ENTER to start");
         btn_startTitle.setBounds(INIT_GAME.getHeight()/2 - 180,100,250,60);
         
         btn_startTitle.setHorizontalAlignment(JLabel.CENTER);
