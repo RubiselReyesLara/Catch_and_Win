@@ -1,9 +1,13 @@
 package catch_and_win;
 
 import java.awt.BorderLayout;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import javax.swing.ImageIcon;
 import javax.swing.WindowConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -37,13 +41,13 @@ public class PrincipalContainer extends javax.swing.JFrame{
     
     
     private void initComponents() {
+        this.setTitle("Catch & Win 1.0");
+        this.setIconImage((new ImageIcon(this.getClass().getResource("/Img/icon.png").getFile())).getImage());
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setLayout(new BorderLayout());
         this.setSize(530, 630);
         this.setLocationRelativeTo(null);
         this.setResizable(false);
-        this.getContentPane().setCursor(null);
-        this.getContentPane().setCursor(null);
         
         this.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
